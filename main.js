@@ -1,53 +1,63 @@
+// select the "Send Request" button
 const sendRequestBtn = document.querySelector("#sendRequestBtn");
-let html = "";
 
-async function data() {
+// create a variable to hold the HTML template for the results
+let resultsHTML = "";
+
+// define a function to handle the API request and display the results
+async function handleRequest() {
+  // select the user's input for the city
   const cityInput = document.querySelector("#cityInput").value;
      
   try {
-    const url = await fetch(`https://api.api-ninjas.com/v1/worldtime?city=${cityInput}`, {
+    // send a request to the API with the user's input
+    const response = await fetch(`https://api.api-ninjas.com/v1/worldtime?city=${cityInput}`, {
       headers: {
         "x-api-key": "6LSQhXixhNrKtoSskVSj4WRu4ErPd6H6OiB64d4k"
       }
     });
 
-    const results = await url.json();
+    // parse the response as JSON
+    const data = await response.json();
 
-    if (results.error) {
+    // if the API returned an error message, display it on the page
+    if (data.error) {
       document.querySelector(".results-container").innerHTML = 
-      `<p class="error">${results.error}</p>`
+      `<p class="error">${data.error}</p>`;
     } else {
-     document.querySelector(".results-container").innerHTML = "loading info.....";
-      html = `
+      // otherwise, generate an HTML template with the results
+      resultsHTML = `
         <div class="time">
-          <span>${results.hour} h</span>
-          <span>${results.minute} m</span>
-          <span>${results.second} s</span>
+          <span>${data.hour} h</span>
+          <span>${data.minute} m</span>
+          <span>${data.second} s</span>
         </div>
 
         <div class="zone-results">
           <div class="timezone card">
             <h5>timezone :</h5>
-            <p>${results.timezone}</p>
+            <p>${data.timezone}</p>
           </div>
           <div class="date card">
             <h5>date :</h5>
-            <p>${results.date}</p>
+            <p>${data.date}</p>
           </div>
           <div class="day-of-week card">
             <h5>day of week :</h5>
-            <p>${results.day_of_week}</p>
+            <p>${data.day_of_week}</p>
           </div>
         </div>
       `;
       
-      document.querySelector(".results-container").innerHTML = html;
-        
+      // insert the HTML template into the results container
+      document.querySelector(".results-container").innerHTML = resultsHTML;
     }
 
   } catch (error) {
-    alert(error);
+    // log any errors to the console
+    console.log(error);
   }
 }
 
-sendRequestBtn.onclick = data;
+// attach the handleRequest function to the "Send Request" button
+sendRequestBtn.onclick = handleRequest;
