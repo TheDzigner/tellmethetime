@@ -67,6 +67,10 @@ body{
   outline: none;
   font-size: 1em;
   font-weight: 500;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: none;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 .container .search_bar button 
